@@ -86,6 +86,28 @@ def get_string_recommendations(strings: list[str], query_string: int) -> list[in
 names = df["name_ar"].tolist() + df["name_en"].tolist()
 
 
+# Fields: (Uniq Id,Crawl Timestamp,Product Url,Product Name,Description,List Price,
+# Sale Price,Brand,Item Number,Gtin,Package Size,Category,Postal Code,Available)
+# n_examples = 5
+# df.head(n_examples)
+# for idx, row in df.head(n_examples).iterrows():
+#     print("")
+# print(f"Title: {row['Product Name']}")
+# print(f"Description: {row['Description'][:30]}")
+# print(f"Label: {row['Category']}")
+# PRODUCTS DETAILS
+# print(f"Name AR: {row['name_ar']}")
+# print(f"Name EN: {row['name_en']}")
+# print(f"Price: {row['price']}")
+# descriptions = df["Description"][:500].tolist()
+# recommended_products = print_recommendations_from_strings(
+#     strings=descriptions,  # let's base similarity off of the article description
+#     index_of_source_string=0,  # articles similar to the first one about Tony Blair
+#     k_nearest_neighbors=5,  # 5 most similar articles
+# )
+# print(recommended_products[:5])
+
+
 def print_recommendations_from_strings(
     strings: list[str], index_of_source_string: int, k_nearest_neighbors: int = 1, model=EMBEDDING_MODEL
 ) -> list[int]:
