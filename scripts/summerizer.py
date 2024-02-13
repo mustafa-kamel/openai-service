@@ -12,7 +12,7 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 # Function to summarize the blog
 def summarize_blog(blog_text):
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model=os.environ.get("COMPLETION_MODEL"),
         messages=[
             {
                 "role": "system",
