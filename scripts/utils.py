@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 from openai import OpenAI
-from scipy import spatial
+from scipy.spatial.distance import cosine
 
 load_dotenv()
 EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL")
@@ -48,19 +48,10 @@ def embedding_from_string(string: str, model: str = EMBEDDING_MODEL, embedding_c
     return embedding_cache[string]
 
 
-def distances_from_embeddings(
-    query_embedding: List[float], embeddings: List[List[float]], distance_metric="cosine"
-) -> List[List]:
+def distances_from_embeddings(query_embedding: List[float], embeddings: List[List[float]]) -> List[List]:
     """Return the distances between a query embedding and a list of embeddings."""
 
-    distance_metrics = {
-        "cosine": spatial.distance.cosine,
-        "L1": spatial.distance.cityblock,
-        "L2": spatial.distance.euclidean,
-        "Linf": spatial.distance.chebyshev,
-    }
-    distances = [distance_metrics[distance_metric](query_embedding, embedding) for embedding in embeddings]
-    return distances
+    return [cosine(query_embedding, embedding) for embedding in embeddings]
 
 
 def indices_of_nearest_neighbors_from_distances(distances) -> np.ndarray:
@@ -77,7 +68,7 @@ def get_string_recommendations(strings: list[str], query_string: int) -> list[in
     # get embeddings for all strings
     embeddings = [embedding_from_string(string) for string in strings]
     # get distances between the source embedding and other embeddings (function from utils.embeddings_utils.py)
-    distances = distances_from_embeddings(query_embedding, embeddings, distance_metric="cosine")
+    distances = distances_from_embeddings(query_embedding, embeddings)
 
     # get indices of nearest neighbors (function from utils.utils.embeddings_utils.py)
     return indices_of_nearest_neighbors_from_distances(distances)
@@ -120,7 +111,7 @@ def print_recommendations_from_strings(
     query_embedding = embeddings[index_of_source_string]
 
     # get distances between the source embedding and other embeddings (function from utils.embeddings_utils.py)
-    distances = distances_from_embeddings(query_embedding, embeddings, distance_metric="cosine")
+    distances = distances_from_embeddings(query_embedding, embeddings)
 
     # get indices of nearest neighbors (function from utils.utils.embeddings_utils.py)
     indices_of_nearest_neighbors = indices_of_nearest_neighbors_from_distances(distances)
