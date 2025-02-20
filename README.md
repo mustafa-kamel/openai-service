@@ -16,7 +16,7 @@ Flask Summarizer is a Python application that utilizes Flask and OpenAI to summa
 1. Clone the repository:
 
 ```
-git clone https://github.com/yourusername/flask-summarizer.git
+git clone git@github.com:mustafa-kamel/openai-service.git
 ```
 
 2. Install dependencies:
